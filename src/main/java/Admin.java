@@ -35,22 +35,19 @@ public class Admin {
 
     private static boolean findIDMatch(String id) throws FileNotFoundException {
         Scanner scan = new Scanner(admin_file);
-        scan.useDelimiter(",");
+        scan.useDelimiter("[\n,]");
         Vector userID = new Vector();
 
         while(scan.hasNext()) {
             userID.add(scan.next());
             scan.next();
-            scan.nextLine();
+            scan.next();
         }
 
         if (isNewAdminFile()) {
             return true;
         }
 
-        int last = userID.size() - 1;
-        Collections.sort(userID);
-        System.out.println(userID);
         return searchID(userID, id);
     }
 
@@ -74,14 +71,6 @@ public class Admin {
                 + rand.nextInt(roll)
                 + rand.nextInt(max - min)
                 + rand.nextInt(roll);
-    }
-
-    private void deleteFood(String ID) {
-
-    }
-
-    private void modifyFood() {
-
     }
 
     public static boolean isNewAdminFile() {
@@ -135,11 +124,11 @@ public class Admin {
         System.out.println("First new user are required to ");
         System.out.println("write down the information below ");
         System.out.print("Username         : ");
-        String username = inp.nextLine();
+        String username = inp.next();
         System.out.print("Password         : ");
-        String password = inp.nextLine();
+        String password = inp.next();
         System.out.print("Confirm Password : ");
-        String confirm_match = inp.nextLine();
+        String confirm_match = inp.next();
 
         Admin admin = new Admin(password, confirm_match);
         if(!admin.checkMatch()) {
@@ -148,6 +137,8 @@ public class Admin {
         } else {
             addAdmin(username, password);
         }
+
+        option();
     }
 
     public static void adminLogin() throws IOException {
@@ -157,9 +148,9 @@ public class Admin {
         System.out.println("Admins are required to login");
         System.out.println("every times for security issue");
         System.out.print("User ID/username : ");
-        String userId = inp.nextLine();
+        String userId = inp.next();
         System.out.print("Password         : ");
-        String password = inp.nextLine();
+        String password = inp.next();
 
         if (loginProcedure(userId, password)) {
             option();
@@ -178,7 +169,7 @@ public class Admin {
     private static String foodStatus() {
         System.out.println("a: Available  na: Not Available");
         System.out.print("Food Status[a/na] : ");
-        String status = inp.nextLine();
+        String status = inp.next();
 
         if (!(status.equals("a") || status.equals("na"))) {
             System.out.println("Must be either a or na");
@@ -192,7 +183,7 @@ public class Admin {
         System.out.println("s: [Large, Medium, Small]");
         System.out.println("o: None");
         System.out.print("Size[s/o]        : ");
-        String size = inp.nextLine();
+        String size = inp.next();
 
         if (!(size.equals("s") || size.equals("o"))) {
             System.out.println("Must be range in s/o");
@@ -214,7 +205,7 @@ public class Admin {
 
         if (size.equals("None")) {
             System.out.print("Food Price       : RM");
-            String price = inp.nextLine();
+            String price = inp.next();
             s_price.add(price);
         } else if (size.equals("Large, Medium, Small")) {
             System.out.println("Please enter price 0 when");
@@ -236,7 +227,7 @@ public class Admin {
         try {
             System.out.println("1. " + category[0] + " 2. " + category[1] + " 3. " + category[2]);
             System.out.print("Category       : ");
-            cate = inp.nextLine();
+            cate = inp.next();
 
             if (!(cate.equals("1") || cate.equals("2") || cate.equals("3"))) {
                 System.out.println("Please enter [1 - 3] only...");
@@ -252,21 +243,20 @@ public class Admin {
 
     private static String bhv() {
         String bhv_s = null;
-        String permit = null;
+        int permit = 0;
         String [] bhvStatus = {"Beef", "Halal", "Vegetarian"};
-
         System.out.println("Enter 1 if permissible exist");
         for (int i = 0; i < bhvStatus.length; i++) {
             System.out.print("Food Permissible [" + bhvStatus[i] + "] : ");
-            permit = inp.nextLine();
+            permit = inp.nextInt();
 
-            if (permit.equals("1")) {
+            if (Integer.toString(permit).equals("1")) {
                 bhv_s = bhvStatus[i];
                 break;
             }
         }
 
-        if (permit.equals("0")) {
+        if (Integer.toString(permit).equals("0")) {
             bhv_s = "None";
         }
 
@@ -361,8 +351,8 @@ public class Admin {
         return searchID(menuID, id);
     }
 
-    private static void modifyMenu() {
-
+    private static void modifyMenu() throws FileNotFoundException {
+        modifyFood();
     }
 
     private static void deleteMenu() throws IOException {
@@ -371,12 +361,10 @@ public class Admin {
 
         String fid, FoodName, status, category, size, BHV, price;
         Scanner scan = new Scanner(menu_file);
-        scan.useDelimiter(",");
+        scan.useDelimiter("[,\n]");
 
         System.out.print("Please Enter the ID of food that you wish to delete : ");
-        String idf = inp.nextLine();
-
-        File new_menu_file = new File("src/main/java/menu.csv");
+        String idf = inp.next();
 
         try {
             FileWriter output_adminFile = new FileWriter(tempFile, true);
@@ -389,7 +377,7 @@ public class Admin {
                 category = scan.next().replaceAll("[\",]", "");
                 size = scan.next().replaceAll("[\",]", "");
                 BHV = scan.next().replaceAll("[\",]", "");
-                price = scan.nextLine().replaceAll("[\",]", "");
+                price = scan.next().replaceAll("[\",]", "");
 
 //                System.out.println(fid + FoodName + status + category + size + BHV + price);
 
@@ -412,22 +400,203 @@ public class Admin {
         option();
     }
 
+    private static void modifyFood() throws FileNotFoundException {
+        File menu_file = new File("src/main/java/menu.csv");
+        File tempFile = new File("src/main/java/tempMenu.csv");
+        String fid, FoodName, status, category, size, BHV, price;
+        Vector fids = new Vector();
+        Scanner scan = new Scanner(menu_file);
+        scan.useDelimiter("[,\n]");
+
+        try {
+            FileWriter output_adminFile = new FileWriter(tempFile, true);
+            CSVWriter writer = new CSVWriter(output_adminFile);
+
+            System.out.print("Please Enter the ID of food that you wish to modify : ");
+            String idf = inp.next();
+
+            while (scan.hasNext()) {
+                fid = scan.next().replace("\"", "");
+                FoodName = scan.next().replaceAll("[\",]", "");
+                status = scan.next().replaceAll("[\",]", "");
+                category = scan.next().replaceAll("[\",]", "");
+                size = scan.next().replaceAll("[\",]", "");
+                BHV = scan.next().replaceAll("[\",]", "");
+                price = scan.next().replaceAll("[\",]", "");
+                fids.add(fid);
+
+                if (fid.compareTo(idf) == 0) {
+                    modifyMenuList(fid, FoodName, status, category, size, BHV, price);
+                    System.out.print("Please Choose the food information you want to modify : ");
+                    String mo_num = inp.next();
+                    String mo_value = null;
+
+                    switch (mo_num) {
+                        case "1" -> {
+                            mo_value = returnName();
+                        }
+                        case "2" -> {
+                            mo_value = returnStatus();
+                        }
+                        case "3" -> {
+                            mo_value = returnCate();
+                        }
+                        case "4" -> {
+                            mo_value = returnSize();
+                        }
+                        case "5" -> {
+                            mo_value = returnBHV();
+                        }
+                        case "6" -> {
+                            mo_value = returnPrice(size);
+                        }
+                    }
+
+                    if (mo_num.equals("1")) {
+                        String[] food = {fid, mo_value, status, category, size, BHV, price};
+                        writer.writeNext(food);
+                        System.out.println("Food name Modified...");
+                    }  else if (mo_num.equals("2")) {
+                        String[] food = {fid, FoodName, mo_value, category, size, BHV, price};
+                        writer.writeNext(food);
+                        System.out.println("Status Modified...");
+                    } else if (mo_num.equals("3")) {
+                        String[] food = {fid, FoodName, status, mo_value, size, BHV, price};
+                        writer.writeNext(food);
+                        System.out.println("Category Modified...");
+                    } else if (mo_num.equals("4")) {
+                        String[] food = {fid, FoodName, status, category, mo_value, BHV, price};
+                        writer.writeNext(food);
+                        System.out.println("Size Modified...");
+                    } else if (mo_num.equals("5")) {
+                        String[] food = {fid, FoodName, status, category, size, mo_value, price};
+                        writer.writeNext(food);
+                        System.out.println("Permissible Modified...");
+                    } else if (mo_num.equals("6")) {
+                        String[] food = {fid, FoodName, status, category, size, BHV, mo_value};
+                        writer.writeNext(food);
+                        System.out.println("Price Modified...");
+                    } else {
+                        System.out.println("Please enter range in [1-6] only");
+                        modifyFood();
+                    }
+                } else {
+                    String[] food = {fid, FoodName, status, category, size, BHV, price};
+                    writer.writeNext(food);
+                }
+            }
+
+            writer.close();
+            scan.close();
+            menu_file.delete();
+            File dummies = new File("src/main/java/menu.csv");
+            tempFile.renameTo(dummies);
+            tempFile.delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private static String returnName() {
+        System.out.print("Please Enter the new food name : ");
+        String name = inp.next();
+        return name;
+    }
+
+    private static String returnStatus() {
+        System.out.println("Please Enter the new status         : ");
+        String status = foodStatus();
+        return status;
+    }
+
+    private static String returnCate() {
+        System.out.println("Please Enter the new Category     : ");
+        String cate = category();
+        return cate;
+    }
+
+    private static String returnSize() {
+        System.out.println("Please Enter the new Size         : ");
+        String size = foodSize();
+        return size;
+    }
+
+    private static String returnBHV() {
+        System.out.println("Please Enter the new permissible : ");
+        String bhv = bhv();
+        return bhv;
+    }
+
+    private static String returnPrice(String sz) {
+        Vector s_price = new Vector();
+        String [] f_size = {"Large", "Medium", "Small"};
+
+        if (sz.equals("None")) {
+            System.out.print("Food Price       : RM");
+            String price = inp.next();
+            s_price.add(price);
+        } else if (sz.equals("Large, Medium, Small")) {
+            System.out.println("Please enter price 0 when");
+            System.out.println("specific size is not exist");
+            for (int i = 0; i < 3; i++) {
+                System.out.print("Food Price [" + f_size[i] + "] : RM");
+                String price = inp.next();
+                s_price.add(price);
+            }
+        }
+
+        return s_price.toString();
+    }
+
+    private static void modifyMenuList(String id, String food, String status, String cate, String size, String permissible,
+                                       String price) {
+        System.out.println("==============================");
+        System.out.println("\t\tModify Menu");
+        System.out.println("==============================");
+        System.out.println("Food ID : " + id);
+        System.out.println("1. Food Name   : " + food);
+        System.out.println("2. Status      : " + status);
+        System.out.println("3. Category    : " + cate);
+        System.out.println("4. Size        : " + size);
+        System.out.println("5. Permissible : " + permissible);
+        System.out.println("6. Price       : RM" + price);
+        System.out.println("0. Back to main menu");
+    }
+
     private static void logout() {
         System.out.println("Thank you for using the system");
         System.out.println("The system logged out.........");
     }
 
     private static void option() throws IOException {
+        inp.skip("\\R?");
         try {
             adminMenu();
             System.out.print("Please choose an option [1 - 5] : ");
             String opt = inp.nextLine();
             switch (opt) {
-                case "1" -> addNewMenu();
-                case "2" -> modifyMenu();
-                case "3" -> deleteMenu();
-                case "4" -> new_admin_page();
-                case "5" -> logout();
+                case "1" -> {
+                    addNewMenu();
+                    break;
+                }
+                case "2" -> {
+                    modifyMenu();
+                    break;
+                }
+                case "3" -> {
+                    deleteMenu();
+                    break;
+                }
+                case "4" -> {
+                    new_admin_page();
+                    break;
+                }
+                case "5" -> {
+                    logout();
+                    break;
+                }
                 default -> {
                     System.out.print("\nPlease enter a valid number from\n");
                     System.out.println("range [1 - 5]");
@@ -438,6 +607,7 @@ public class Admin {
             System.out.print("\nPlease enter a valid number from\n");
             System.out.println("range [1 - 5] & do not enter any");
             System.out.println("alphabet from [a - z]");
+            e.printStackTrace();
             option();
         }
     }
@@ -500,6 +670,9 @@ public class Admin {
         // the admin is required to type in admin name & admin password twice
         //if the admin login, he/she will have 4 options to choose which are view menu,
         // add menu, delete menu by id, and modify food information by id
-        login();
+//        login();
+//        modifyFood();
+//        addNewMenu();
+        new_admin_page();
     }
 }
