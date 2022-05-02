@@ -469,7 +469,7 @@ public class Admin {
                         writer.writeNext(food);
                         System.out.println("Category Modified...");
                     } else if (mo_num.equals("4")) {
-                        String mo_price = null;
+                        String mo_price;
 
                         if (mo_value.equals(size)) {
                             System.out.println("Size Modify Unchanged...");
@@ -477,6 +477,7 @@ public class Admin {
                         }
 
                         mo_price = returnPrice(mo_value);
+                        System.out.println(mo_price);
 
                         String[] food = {fid, FoodName, status, category, mo_value, BHV, mo_price};
                         writer.writeNext(food);
