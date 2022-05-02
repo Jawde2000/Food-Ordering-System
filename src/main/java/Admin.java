@@ -161,6 +161,7 @@ public class Admin {
     }
 
     private static String food() {
+        inp.skip("\\R?");
         System.out.print("Food Name         : ");
         String name = inp.nextLine();
         return name;
@@ -351,7 +352,7 @@ public class Admin {
         return searchID(menuID, id);
     }
 
-    private static void modifyMenu() throws FileNotFoundException {
+    private static void modifyMenu() throws IOException {
         modifyFood();
     }
 
@@ -400,13 +401,13 @@ public class Admin {
         option();
     }
 
-    private static void modifyFood() throws FileNotFoundException {
+    private static void modifyFood() throws IOException {
         File menu_file = new File("src/main/java/menu.csv");
         File tempFile = new File("src/main/java/tempMenu.csv");
         String fid, FoodName, status, category, size, BHV, price;
         Vector fids = new Vector();
         Scanner scan = new Scanner(menu_file);
-        scan.useDelimiter("[,\n]");
+        scan.useDelimiter("[\n,]");
 
         try {
             FileWriter output_adminFile = new FileWriter(tempFile, true);
@@ -424,6 +425,9 @@ public class Admin {
                 BHV = scan.next().replaceAll("[\",]", "");
                 price = scan.next().replaceAll("[\",]", "");
                 fids.add(fid);
+
+//                System.out.println(fid + " " + FoodName  + " " + status  + " " + category
+//                        + " " +  size  + " " + BHV  + " " + price);
 
                 if (fid.compareTo(idf) == 0) {
                     modifyMenuList(fid, FoodName, status, category, size, BHV, price);
@@ -476,8 +480,10 @@ public class Admin {
                         String[] food = {fid, FoodName, status, category, size, BHV, mo_value};
                         writer.writeNext(food);
                         System.out.println("Price Modified...");
+                    } else if (mo_num.equals("0")) {
+                        option();
                     } else {
-                        System.out.println("Please enter range in [1-6] only");
+                        System.out.println("Please enter range in [0-6] only");
                         modifyFood();
                     }
                 } else {
@@ -492,16 +498,22 @@ public class Admin {
             File dummies = new File("src/main/java/menu.csv");
             tempFile.renameTo(dummies);
             tempFile.delete();
+
+            if (!searchID(fids, idf)) {
+                System.out.println("ID not exist in the database...");
+                modifyFood();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
+        option();
     }
 
     private static String returnName() {
+        inp.skip("\\R?");
         System.out.print("Please Enter the new food name : ");
-        String name = inp.next();
+        String name = inp.nextLine();
         return name;
     }
 
@@ -571,11 +583,10 @@ public class Admin {
     }
 
     private static void option() throws IOException {
-        inp.skip("\\R?");
         try {
             adminMenu();
             System.out.print("Please choose an option [1 - 5] : ");
-            String opt = inp.nextLine();
+            String opt = inp.next();
             switch (opt) {
                 case "1" -> {
                     addNewMenu();
