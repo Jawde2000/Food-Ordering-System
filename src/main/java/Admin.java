@@ -74,7 +74,7 @@ public class Admin {
     }
 
     public static boolean isNewAdminFile() {
-        File admin = new File("menu.csv");
+        File admin = new File("admin.csv");
 
         return admin.length() == 0;
     }
