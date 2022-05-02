@@ -74,13 +74,13 @@ public class Admin {
     }
 
     public static boolean isNewAdminFile() {
-        File admin = new File("src/main/java/admin.csv");
+        File admin = new File("menu.csv");
 
         return admin.length() == 0;
     }
 
     public static boolean isNewMenuFile() {
-        File menu = new File("src/main/java/menu.csv");
+        File menu = new File("menu.csv");
 
         return menu.length() == 0;
     }
@@ -192,7 +192,7 @@ public class Admin {
         }
 
         if (size.equals("s")) {
-            size = "Large, Medium, Small";
+            size = "Large|Medium|Small";
         } else if (size.equals("o")) {
             size = "None";
         }
@@ -293,7 +293,7 @@ public class Admin {
     }
 
     private static void addFood(String FoodName, String status, String category, String size, String BHV, Vector price) throws IOException {
-        File menu_file = new File("src/main/java/menu.csv");
+        File menu_file = new File("menu.csv");
         String fid = generateFID();
 
         try {
@@ -320,7 +320,7 @@ public class Admin {
     }
 
     private static boolean findFIDMatch(String id) throws FileNotFoundException {
-        File menu_file = new File("src/main/java/menu.csv");
+        File menu_file = new File("menu.csv");
         Scanner scan = new Scanner(menu_file);
         scan.useDelimiter(",");
         Vector menuID = new Vector();
@@ -357,8 +357,8 @@ public class Admin {
     }
 
     private static void deleteMenu() throws IOException {
-        File menu_file = new File("src/main/java/menu.csv");
-        File tempFile = new File("src/main/java/tempMenu.csv");
+        File menu_file = new File("menu.csv");
+        File tempFile = new File("menu.csv");
 
         String fid, FoodName, status, category, size, BHV, price;
         Scanner scan = new Scanner(menu_file);
@@ -391,7 +391,7 @@ public class Admin {
             writer.close();
             scan.close();
             menu_file.delete();
-            File dummies = new File("src/main/java/menu.csv");
+            File dummies = new File("menu.csv");
             tempFile.renameTo(dummies);
             tempFile.delete();
         } catch (Exception e) {
@@ -402,7 +402,7 @@ public class Admin {
     }
 
     private static void modifyFood() throws IOException {
-        File menu_file = new File("src/main/java/menu.csv");
+        File menu_file = new File("menu.csv");
         File tempFile = new File("src/main/java/tempMenu.csv");
         String fid, FoodName, status, category, size, BHV, price;
         Vector fids = new Vector();
@@ -469,7 +469,16 @@ public class Admin {
                         writer.writeNext(food);
                         System.out.println("Category Modified...");
                     } else if (mo_num.equals("4")) {
-                        String[] food = {fid, FoodName, status, category, mo_value, BHV, price};
+                        String mo_price = null;
+
+                        if (mo_value.equals(size)) {
+                            System.out.println("Size Modify Unchanged...");
+                            option();
+                        }
+
+                        mo_price = returnPrice(mo_value);
+
+                        String[] food = {fid, FoodName, status, category, mo_value, BHV, mo_price};
                         writer.writeNext(food);
                         System.out.println("Size Modified...");
                     } else if (mo_num.equals("5")) {
@@ -484,7 +493,7 @@ public class Admin {
                         option();
                     } else {
                         System.out.println("Please enter range in [0-6] only");
-                        modifyFood();
+                        option();
                     }
                 } else {
                     String[] food = {fid, FoodName, status, category, size, BHV, price};
@@ -495,7 +504,7 @@ public class Admin {
             writer.close();
             scan.close();
             menu_file.delete();
-            File dummies = new File("src/main/java/menu.csv");
+            File dummies = new File("menu.csv");
             tempFile.renameTo(dummies);
             tempFile.delete();
 
@@ -549,7 +558,7 @@ public class Admin {
             System.out.print("Food Price       : RM");
             String price = inp.next();
             s_price.add(price);
-        } else if (sz.equals("Large, Medium, Small")) {
+        } else if (sz.equals("Large|Medium|Small")) {
             System.out.println("Please enter price 0 when");
             System.out.println("specific size is not exist");
             for (int i = 0; i < 3; i++) {
@@ -559,11 +568,16 @@ public class Admin {
             }
         }
 
-        return s_price.toString();
+        return s_price.toString().replace(",", "");
     }
 
     private static void modifyMenuList(String id, String food, String status, String cate, String size, String permissible,
                                        String price) {
+        if (status.equals("a")) {
+            status = "Available";
+        } else {
+            status = "Not Available";
+        }
         System.out.println("==============================");
         System.out.println("\t\tModify Menu");
         System.out.println("==============================");
