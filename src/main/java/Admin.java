@@ -670,9 +670,6 @@ public class Admin {
         // the admin is required to type in admin name & admin password twice
         //if the admin login, he/she will have 4 options to choose which are view menu,
         // add menu, delete menu by id, and modify food information by id
-//        login();
-//        modifyFood();
-//        addNewMenu();
-        new_admin_page();
+        login();
     }
 }
