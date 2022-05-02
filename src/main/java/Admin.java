@@ -6,7 +6,7 @@ public class Admin {
     private String adminPass;
     private String cfPass;
     public static Scanner inp = new Scanner(System.in);
-    private static final File admin_file = new File("src/main/java/admin.csv");
+    private static final File admin_file = new File("admin.csv");
 
     Admin() {
 
@@ -74,13 +74,13 @@ public class Admin {
     }
 
     public static boolean isNewAdminFile() {
-        File admin = new File("src/main/java/admin.csv");
+        File admin = new File("admin.csv");
 
         return admin.length() == 0;
     }
 
     public static boolean isNewMenuFile() {
-        File menu = new File("src/main/java/menu.csv");
+        File menu = new File("menu.csv");
 
         return menu.length() == 0;
     }
@@ -293,7 +293,7 @@ public class Admin {
     }
 
     private static void addFood(String FoodName, String status, String category, String size, String BHV, Vector price) throws IOException {
-        File menu_file = new File("src/main/java/menu.csv");
+        File menu_file = new File("menu.csv");
         String fid = generateFID();
 
         try {
@@ -320,7 +320,7 @@ public class Admin {
     }
 
     private static boolean findFIDMatch(String id) throws FileNotFoundException {
-        File menu_file = new File("src/main/java/menu.csv");
+        File menu_file = new File("menu.csv");
         Scanner scan = new Scanner(menu_file);
         scan.useDelimiter(",");
         Vector menuID = new Vector();
@@ -357,8 +357,8 @@ public class Admin {
     }
 
     private static void deleteMenu() throws IOException {
-        File menu_file = new File("src/main/java/menu.csv");
-        File tempFile = new File("src/main/java/tempMenu.csv");
+        File menu_file = new File("menu.csv");
+        File tempFile = new File("tempMenu.csv");
 
         String fid, FoodName, status, category, size, BHV, price;
         Scanner scan = new Scanner(menu_file);
@@ -391,7 +391,7 @@ public class Admin {
             writer.close();
             scan.close();
             menu_file.delete();
-            File dummies = new File("src/main/java/menu.csv");
+            File dummies = new File("menu.csv");
             tempFile.renameTo(dummies);
             tempFile.delete();
         } catch (Exception e) {
@@ -402,8 +402,8 @@ public class Admin {
     }
 
     private static void modifyFood() throws IOException {
-        File menu_file = new File("src/main/java/menu.csv");
-        File tempFile = new File("src/main/java/tempMenu.csv");
+        File menu_file = new File("menu.csv");
+        File tempFile = new File("tempMenu.csv");
         String fid, FoodName, status, category, size, BHV, price;
         Vector fids = new Vector();
         Scanner scan = new Scanner(menu_file);
@@ -495,7 +495,7 @@ public class Admin {
             writer.close();
             scan.close();
             menu_file.delete();
-            File dummies = new File("src/main/java/menu.csv");
+            File dummies = new File("menu.csv");
             tempFile.renameTo(dummies);
             tempFile.delete();
 
@@ -635,7 +635,7 @@ public class Admin {
     }
 
     private static boolean loginProcedure(String id, String pass) throws FileNotFoundException {
-        Scanner scan = new Scanner(new File("src/main/java/admin.csv"));
+        Scanner scan = new Scanner(new File("admin.csv"));
         scan.useDelimiter("[,\n]");
         String u_id;
         String u_name;
