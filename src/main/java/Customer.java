@@ -66,6 +66,26 @@ public class Customer {
         System.out.print("Selection: ");
         String select = selection.nextLine();
 
+        switch (select) {
+            case "1":
+                break;
 
+            case "2":
+                break;
+
+            case "3":
+                break;
+
+            case "4":
+                break;
+
+            case "5":
+            System.out.println("Thank you and have a nice day!");
+                break;
+        
+            default:
+            System.out.println("404 ERROR NOT FOUND!");
+                break;
+        }
     }
 }
