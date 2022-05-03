@@ -46,6 +46,7 @@ public class Customer {
 
         System.out.println("Welcome to ABC Restaurant!");
         System.out.println("Here is the menu of our restaurant!");
+        System.out.println(" ");
 
         Scanner menu_file = new Scanner(new File("src/main/java/menu.csv"));
         menu_file.useDelimiter(",");
@@ -53,6 +54,7 @@ public class Customer {
           System.out.print(menu_file.next());
         }
         menu_file.close();
+        System.out.println(" ");
 
         System.out.println("What do you want to do next?");
         System.out.println("1. Add food");          //addFood();
@@ -60,13 +62,10 @@ public class Customer {
         System.out.println("3. Confirm food");      //confirmFood();
         System.out.println("4. Update food");       //updateFood();
         System.out.println("5. Exit");
+        System.out.println(" ");
         System.out.print("Selection: ");
         String select = selection.nextLine();
 
-        if (condition) {
-            
-        } else {
-            
-        }
+
     }
 }
