@@ -20,28 +20,34 @@ public class Customer {
         foodID = fID;
     }
 
-    public void viewMenu() {
+    public void viewMenu() throws IOException{
 
     }
 
-    public void confirmFood(String tID, String fID, String r) {
+    public void confirmFood(String tID, String fID, String r) throws IOException{
 
     }
 
-    public void updateFood(String tID, String fID, String r) {
+    public void updateFood(String tID, String fID, String r) throws IOException{
 
     }
 
-    public void removeFood(String tID, String fID) {
+    public void removeFood(String tID, String fID) throws IOException{
 
     }
 
-    public void addFood(String tID, String fID, String r) {
+    public void addFood(String tID, String fID, String r) throws IOException{
 
     }
 
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException{
+        Scanner menu_file = new Scanner(new File("C:\\Users\\user\\Documents\\GitHub\\Food-Ordering-System\\src\\main\\java\\menu.csv"));
+        menu_file.useDelimiter(",");
+        while (menu_file.hasNext()) {
+          System.out.print(menu_file.next());
+        }
+        menu_file.close();
 //        viewMenu();
 //        addFood();
 //        removeFood();
