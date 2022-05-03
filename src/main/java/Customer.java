@@ -42,7 +42,7 @@ public class Customer {
 
 
     public static void main(String args[]) throws IOException{
-        Scanner menu_file = new Scanner(new File("C:\\Users\\user\\Documents\\GitHub\\Food-Ordering-System\\src\\main\\java\\menu.csv"));
+        Scanner menu_file = new Scanner(new File("src/main/java/menu.csv"));
         menu_file.useDelimiter(",");
         while (menu_file.hasNext()) {
           System.out.print(menu_file.next());
