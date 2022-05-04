@@ -7,7 +7,7 @@ public class Customer {
     private String foodID;
 
     public static Scanner inp = new Scanner(System.in);
-    Scanner Table = new Scanner(System.in);
+    static Scanner Table = new Scanner(System.in);
     private static final File customer_file = new File("customer.csv");
 
     Customer() {
@@ -40,7 +40,7 @@ public class Customer {
         }
     }
 
-    public void confirmFood(String tID, String fID, String r) throws IOException{
+    public static void confirmFood(/*String tID, String fID, String r*/) throws IOException{
         readFile();
         System.out.println("What is your table ID? ");
         int table = Table.nextInt();
@@ -52,7 +52,7 @@ public class Customer {
         }
     }
 
-    public void updateFood(String tID, String fID, String r) throws IOException{
+    public static void updateFood(/*String tID, String fID, String r*/) throws IOException{
         readFile();
         System.out.println("What is your table ID? ");
         int table = Table.nextInt();
@@ -64,12 +64,12 @@ public class Customer {
         }
     }
 
-    public void removeFood(String tID, String fID) throws IOException{
+    public static void removeFood(/*String tID, String fID*/) throws IOException{
         readFile();
 
     }
 
-    public void addFood(String tID, String fID, String r) throws IOException{
+    public static void addFood(/*String tID, String fID, String r*/) throws IOException{
         readFile();
         System.out.println("What is your table ID? ");
         int table = Table.nextInt();
@@ -110,19 +110,19 @@ public class Customer {
 
             switch (select) {
                 case "1":
-                    //addFood();
+                    addFood();
                     break;
 
                 case "2":
-                    //removeFood();
+                    removeFood();
                     break;
 
                 case "3":
-                    //confirmFood();
+                    confirmFood();
                     break;
 
                 case "4":
-                    //updateFood();
+                    updateFood();
                     break;
 
                 case "5":
