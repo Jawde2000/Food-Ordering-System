@@ -14,7 +14,7 @@ public class Customer {
     public static Scanner inp = new Scanner(System.in);
     private static Scanner cusScanner;
     static Scanner Table = new Scanner(System.in);
-    private static final File customer_file = new File("customer.csv");
+    private static final File customer_file = new File("src/main/java/customer.csv");
 
     Customer() {
         tableID = "";
@@ -72,7 +72,7 @@ public class Customer {
 
     public static void removeFood(String filepath,String removeTerm) throws IOException{
         //readFile();
-        String tempFile = "tempCustomer.csv";
+        String tempFile = "src/main/java/tempCustomer.csv";
         File oldFile = new File(filepath);
         File newFile = new File(tempFile);
         String tID = "";
