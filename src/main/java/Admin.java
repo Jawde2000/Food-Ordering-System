@@ -208,7 +208,7 @@ public class Admin {
             System.out.print("Food Price       : RM");
             String price = inp.next();
             s_price.add(price);
-        } else if (size.equals("Large, Medium, Small")) {
+        } else if (size.equals("Large|Medium|Small")) {
             System.out.println("Please enter price 0 when");
             System.out.println("specific size is not exist");
             for (int i = 0; i < 3; i++) {
