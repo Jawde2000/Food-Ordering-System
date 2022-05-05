@@ -1,5 +1,10 @@
 import java.io.*;
+import java.text.BreakIterator;
 import java.util.*;
+import javax.swing.*;
+
+import javax.swing.JOptionPane;
+
 import com.opencsv.*;
 public class Customer {
     private String tableID;
@@ -7,6 +12,7 @@ public class Customer {
     private String foodID;
 
     public static Scanner inp = new Scanner(System.in);
+    private static Scanner cusScanner;
     static Scanner Table = new Scanner(System.in);
     private static final File customer_file = new File("customer.csv");
 
@@ -24,7 +30,7 @@ public class Customer {
 
     private static void readFile() {
         try {
-            FileReader filereader = new FileReader("customer.csv");
+            FileReader filereader = new FileReader("src/main/java/customer.csv");
             CSVReader csvReader = new CSVReader(filereader);
             String[] nextRecord;
 
@@ -64,9 +70,40 @@ public class Customer {
         }
     }
 
-    public static void removeFood(/*String tID, String fID*/) throws IOException{
-        readFile();
+    public static void removeFood(String filepath,String removeTerm) throws IOException{
+        //readFile();
+        String tempFile = "tempCustomer.csv";
+        File oldFile = new File(filepath);
+        File newFile = new File(tempFile);
+        String tID = "";
+        String fID = "";
+        String r = "";
 
+        try {
+            FileWriter fw = new FileWriter(tempFile, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            cusScanner = new Scanner(new File(filepath));
+            cusScanner.useDelimiter("[,\n]");
+
+            while (cusScanner.hasNext()) {
+                tID = cusScanner.next();
+                fID = cusScanner.next();
+                r = cusScanner.next();
+
+                if (!tID.equals(removeTerm)) {
+                    pw.println(tID + "," + fID + "," + r);
+                }
+            }
+            cusScanner.close();
+            pw.flush();
+            pw.close();
+            oldFile.delete();
+            File dump = new File(filepath);
+            newFile.renameTo(dump);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error");
+        }
     }
 
     public static void addFood(/*String tID, String fID, String r*/) throws IOException{
@@ -114,7 +151,11 @@ public class Customer {
                     break;
 
                 case "2":
-                    removeFood();
+                    Scanner sc= new Scanner(System.in);
+                    String filepath = "src/main/java/Customer.csv";
+                    System.out.println("What do you want to remove?");
+                    String removeTerm = sc.nextLine();
+                    removeFood(filepath, removeTerm);
                     break;
 
                 case "3":
@@ -131,6 +172,7 @@ public class Customer {
         
                 default:
                     System.out.println("404 ERROR NOT FOUND!");
+                    System.out.println("PLEASE TRY AGAIN!");
                     break;
             } selection.close();
     } 
