@@ -55,7 +55,7 @@ public class Customer {
 
     public static void confirmFood() throws IOException{
         readFile();
-        System.out.println("Press enter to continue");
+        System.out.println("Press enter to submit your order...");
         try{
             System.in.read();
             writeFileAsAppend();
