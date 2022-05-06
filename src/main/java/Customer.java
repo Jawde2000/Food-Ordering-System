@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.JOptionPane;
 
 import com.opencsv.*;
+
+import java.nio.file.*;
 public class Customer {
     private String tableID;
     private String Remarks;
@@ -51,16 +53,36 @@ public class Customer {
         }
     }
 
-    public static void confirmFood(/*String tID, String fID, String r*/) throws IOException{
+    public static void confirmFood() throws IOException{
         readFile();
-        System.out.println("What is your table ID? ");
-        int table = Table.nextInt();
-        if (table >= 1 && table <= 50) {
-            
-        } else {
-            System.out.println("Table ID not found!");
-            System.out.println("Please try again!");
+        System.out.println("Press enter to continue");
+        try{
+            System.in.read();
+            writeFileAsAppend();
         }
+        catch(Exception e){}
+    }
+
+    private static void writeFileAsAppend() throws IOException {
+        List<String> lines = readFileAsSequencesOfLines();
+        Path path = getWriteFilePath();         
+        Files.write(path, lines, StandardOpenOption.APPEND);
+    }
+
+    private static List<String> readFileAsSequencesOfLines() throws IOException {
+        Path path = getReadFilePath();          
+        List<String> lines = Files.readAllLines(path);    
+        return lines;
+    }
+
+    private static Path getReadFilePath() {
+        Path path = Paths.get("src/main/java/customer.csv");    
+        return path.normalize();
+    }
+
+    private static Path getWriteFilePath() {
+        Path path = Paths.get("src/main/java/order.csv");    
+        return path;
     }
 
     public static void updateFood(/*String tID, String fID, String r*/) throws IOException{
@@ -123,7 +145,6 @@ public class Customer {
             String filepath = "src/main/java/customer.csv";
             
             saveCustomer(tID, fID, r, filepath);
-            option();
         } else {
             System.out.println("Table ID not found!");
             System.out.println("Please try again!");
@@ -141,6 +162,7 @@ public class Customer {
             pw.close();
 
             JOptionPane.showMessageDialog(null, "Your order has been saved.");
+            option();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Your order has NOT been saved.");
         } 
