@@ -14,7 +14,7 @@ public class Customer {
     private static String foodID;
 
     public static Scanner inp = new Scanner(System.in);
-    private static Scanner cusScanner;
+    private static Scanner cusScanner = new Scanner(System.in);
     static Scanner Table = new Scanner(System.in);
     private static final File customer_file = new File("src/main/java/customer.csv");
 
@@ -34,6 +34,43 @@ public class Customer {
     public String getFoodID() {return foodID;}
     public String getRemarks() {return Remarks;}
 
+    public static boolean isNewCustomerFile() {
+        File menu = new File("customer.csv");
+        return menu.length() == 0;
+    }
+
+    public static boolean isNewOrderFile() {
+        File menu = new File("order.csv");
+        return menu.length() == 0;
+    }
+
+    public static boolean isNewMenuFile() {
+        File menu = new File("menu.csv");
+        return menu.length() == 0;
+    }
+
+    private static void addCustomerFood(String tID, String fID, String _r) throws IOException {
+        File menu_file = new File("src/main/java/customer.csv");
+        //String fid = generateFID();
+
+        try {
+            FileWriter output_adminFile = new FileWriter(menu_file, true);
+            CSVWriter writer = new CSVWriter(output_adminFile);
+
+            if (isNewCustomerFile()) {
+                String [] header = {"TableID", "FoodID", "Remarks"};
+                writer.writeNext(header);
+            }
+
+            String [] user = {tID, fID, _r};
+            writer.writeNext(user);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        option();
+    }
 
     private static void readFile() {
         try {
@@ -132,23 +169,23 @@ public class Customer {
         }
     }
 
-    public static void addFood(/*String tID, String fID, String r*/) throws IOException{
-        readFile();
-        Scanner id = new Scanner(System.in);
-        System.out.println("What is your table ID?");
-        int tID = id.nextInt();
-        if (tID >= 1 && tID <= 50) {
+    public static void addFood() throws IOException{
+        try {
+            readFile();
+            Scanner id = new Scanner(System.in);
+            System.out.println("What is your table ID?");
+            String tID = id.next();
             System.out.println("Enter the food ID you want to order: ");
             String fID = id.next();
             System.out.println("Please enter your remarks or put a dash (-) if you do not have any remarks: ");
-            String r = id.next();
+            String _r = id.next();
             String filepath = "src/main/java/customer.csv";
             
-            saveCustomer(tID, fID, r, filepath);
-        } else {
-            System.out.println("Table ID not found!");
-            System.out.println("Please try again!");
-        } 
+            addCustomerFood(tID, fID, _r);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void saveCustomer(int tID, String fID, String r, String filepath) {
