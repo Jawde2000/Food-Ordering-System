@@ -51,7 +51,6 @@ public class Customer {
 
     private static void addCustomerFood(String tID, String fID, String _r) throws IOException {
         File menu_file = new File("src/main/java/customer.csv");
-        //String fid = generateFID();
 
         try {
             FileWriter output_adminFile = new FileWriter(menu_file, true);
@@ -90,10 +89,35 @@ public class Customer {
         }
     }
 
+    private static void addConfirmFood(String fID, String _q) throws IOException {
+        File menu_file = new File("src/main/java/order.csv");
+
+        try {
+            FileWriter output_adminFile = new FileWriter(menu_file, true);
+            CSVWriter writer = new CSVWriter(output_adminFile);
+
+            if (isNewCustomerFile()) {
+                String [] header = {"FoodID", "Quantity"};
+                writer.writeNext(header);
+            }
+
+            String [] user = {fID, _q};
+            writer.writeNext(user);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        option();
+    }
+
     public static void confirmFood() throws IOException{
         readFile();
         System.out.println("Press enter to submit your order...");
         try{
+            String fID = "";
+            String _q = "";
+            addConfirmFood(fID, _q);
             System.in.read();
             writeFileAsAppend();
         }
@@ -122,51 +146,47 @@ public class Customer {
         return path;
     }
 
-    public static void updateFood(/*String tID, String fID, String r*/) throws IOException{
-        readFile();
-        System.out.println("What is your table ID? ");
-        int table = Table.nextInt();
-        if (table >= 1 && table <= 50) {
-            
-        } else {
-            System.out.println("Table ID not found!");
-            System.out.println("Please try again!");
-        }
+    public static void updateFood() throws IOException{
+        
     }
 
-    public static void removeFood(String filepath,String removeTerm) throws IOException{
-        String tempFile = "src/main/java/tempCustomer.csv";
-        File oldFile = new File(filepath);
-        File newFile = new File(tempFile);
-        String tID = "";
-        String fID = "";
-        String r = "";
+    private static void removeFood() throws IOException{
+        File menu_file = new File("customer.csv");
+        File tempFile = new File("customer.csv");
+
+        String tID, fID, _r;
+        Scanner scan = new Scanner(customer_file);
+        scan.useDelimiter("[,\n]");
+
+        System.out.print("Please enter the FoodID you want to remove:  ");
+        String idf = inp.next();
 
         try {
-            FileWriter fw = new FileWriter(tempFile, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-            cusScanner = new Scanner(new File(filepath));
-            cusScanner.useDelimiter("[,\n]");
+            FileWriter output_customerFile = new FileWriter(tempFile, true);
+            CSVWriter writer = new CSVWriter(output_customerFile);
 
-            while (cusScanner.hasNext()) {
-                tID = cusScanner.next();
-                fID = cusScanner.next();
-                r = cusScanner.next();
+            while (scan.hasNext()) {
+                tID = scan.next().replace("\"", "");
+                fID = scan.next().replaceAll("[\",]", "");
+                _r = scan.next().replaceAll("[\",]", "");
 
-                if (!tID.equals(removeTerm)) {
-                    pw.println(tID + "," + fID + "," + r);
+                if(tID.compareTo(idf) != 0) {
+                    String [] food = {tID, fID, _r};
+                    writer.writeNext(food);
                 }
             }
-            cusScanner.close();
-            pw.flush();
-            pw.close();
-            oldFile.delete();
-            File dump = new File(filepath);
-            newFile.renameTo(dump);
+
+            writer.close();
+            scan.close();
+            menu_file.delete();
+            File dummies = new File("customer.csv");
+            tempFile.renameTo(dummies);
+            tempFile.delete();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error");
+            e.printStackTrace();
         }
+
+        option();
     }
 
     public static void addFood() throws IOException{
@@ -221,12 +241,7 @@ public class Customer {
                     break;
 
                 case "2":
-                    Scanner sc= new Scanner(System.in);
-                    String filepath = "src/main/java/customer.csv";
-                    readFile();
-                    System.out.println("What do you want to remove?");
-                    String removeTerm = sc.next();
-                    removeFood(filepath, removeTerm);
+                    removeFood();
                     break;
 
                 case "3":
