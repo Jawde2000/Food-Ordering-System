@@ -194,11 +194,11 @@ public class Customer {
             readFile();
             Scanner id = new Scanner(System.in);
             System.out.println("What is your table ID?");
-            String tID = id.next();
+            String tID = id.nextLine();
             System.out.println("Enter the food ID you want to order: ");
-            String fID = id.next();
+            String fID = id.nextLine();
             System.out.println("Please enter your remarks or put a dash (-) if you do not have any remarks: ");
-            String _r = id.next();
+            String _r = id.nextLine();
             String filepath = "src/main/java/customer.csv";
             
             addCustomerFood(tID, fID, _r);
