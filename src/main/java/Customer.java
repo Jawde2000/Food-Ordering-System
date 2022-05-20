@@ -96,7 +96,7 @@ private static void readFile() {
               + rand.nextInt(roll);
   }
 
-  private static void addFood(String tID, String fID,String r) throws IOException {
+  private static void addFood(String tID, String fID,String q) throws IOException {
     File menu_file = new File("src/main/java/customer.csv");
     String oid = generateOID();
 
@@ -105,7 +105,7 @@ private static void readFile() {
         CSVWriter writer = new CSVWriter(output_customerFile);
 
         if (isNewCustomerFile()) {
-            String [] header = {"TableID", "FoodID", "Remarks"};
+            String [] header = {"TableID", "FoodID", "Quantity"};
             writer.writeNext(header);
         }
 
