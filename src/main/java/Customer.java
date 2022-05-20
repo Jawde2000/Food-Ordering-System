@@ -1,94 +1,211 @@
 import java.io.*;
-import java.text.BreakIterator;
 import java.util.*;
 import javax.swing.*;
-
-import javax.swing.JOptionPane;
-
 import com.opencsv.*;
+import com.opencsv.exceptions.CsvValidationException;
 
-import java.nio.file.*;
 public class Customer {
-    private String tableID;
-    private String Remarks;
-    private static String foodID;
+  private String tableID;
+  private String Remarks;
+  private String foodID;
+  private int Quantity;
+  public static Scanner inp = new Scanner(System.in);
+  private static final File admin_file = new File("src/main/java/customer.csv");
 
-    public static Scanner inp = new Scanner(System.in);
-    private static Scanner cusScanner = new Scanner(System.in);
-    static Scanner Table = new Scanner(System.in);
-    private static final File customer_file = new File("src/main/java/customer.csv");
+  Customer() {
 
-    Customer() {
-        tableID = "";
-        Remarks = "";
-        foodID = "";
-    }
+  }
 
-    Customer(String tID, String r, String fID) {
-        this.tableID = tID;
-        this.Remarks = r;
-        this.foodID = fID;
-    }
+  Customer(String tID, String fID, String r, int q) {
+    this.tableID = tID;
+    this.foodID = fID;
+    this.Remarks = r;
+    this.Quantity = q;
+  }
 
-    public String getTableID() {return tableID;}
-    public String getFoodID() {return foodID;}
-    public String getRemarks() {return Remarks;}
+  private String returnTableID() {
+    return this.tableID;
+  }
 
-    public static boolean isNewCustomerFile() {
-        File menu = new File("customer.csv");
-        return menu.length() == 0;
-    }
+  private String returnFoodID() {
+    return this.foodID;
+  }
+
+  private String returnRemarks() {
+    return this.Remarks;
+  }
+
+  private int returnQuantity() {
+    return this.Quantity;
+  }
+
+  private static String generateID() {
+    Random rand = new Random();
+    int max = 2000;
+    int min = 1000;
+    int roll = 9;
+    return "customer"
+            + rand.nextInt(max - min)
+            + rand.nextInt(roll)
+            + rand.nextInt(max - min)
+            + rand.nextInt(roll);
+}
+
+private static void readFile() {
+  try {
+      FileReader filereader = new FileReader("src/main/java/customer.csv");
+      CSVReader csvReader = new CSVReader(filereader);
+      String[] nextRecord;
+
+      while ((nextRecord = csvReader.readNext()) != null) {
+          for (String cell : nextRecord) {
+              System.out.print(cell + "\t");
+          }
+          System.out.println();
+      } csvReader.close();
+  }
+  catch (Exception e) {
+      e.printStackTrace();
+  }
+}
+
+  public static boolean isNewCustomerFile() {
+    File customer = new File("src/main/java/customer.csv");
+    return customer.length() == 0;
+  }
 
     public static boolean isNewOrderFile() {
-        File menu = new File("order.csv");
-        return menu.length() == 0;
+      File order = new File("src/main/java/order.csv");
+      return order.length() == 0;
     }
 
     public static boolean isNewMenuFile() {
-        File menu = new File("menu.csv");
-        return menu.length() == 0;
+      File menu = new File("src/main/java/menu.csv");
+      return menu.length() == 0;
     }
 
-    private static void addCustomerFood(String tID, String fID, String _r) throws IOException {
-        File menu_file = new File("src/main/java/customer.csv");
+    private static String generateOID() {
+      Random rand = new Random();
+      int max = 200;
+      int min = 100;
+      int roll = 9;
+      return "OID"
+              + rand.nextInt(max - min)
+              + rand.nextInt(roll)
+              + rand.nextInt(max - min)
+              + rand.nextInt(roll);
+  }
 
-        try {
-            FileWriter output_adminFile = new FileWriter(menu_file, true);
-            CSVWriter writer = new CSVWriter(output_adminFile);
+  private static void addFood(String tID, String fID,String r) throws IOException {
+    File menu_file = new File("src/main/java/customer.csv");
+    String oid = generateOID();
 
-            if (isNewCustomerFile()) {
-                String [] header = {"TableID", "FoodID", "Remarks"};
-                writer.writeNext(header);
+    try {
+        FileWriter output_customerFile = new FileWriter(order_file, true);
+        CSVWriter writer = new CSVWriter(output_customerFile);
+
+        if (isNewCustomerFile()) {
+            String [] header = {"TableID", "FoodID", "Remarks"};
+            writer.writeNext(header);
+        }
+
+        if(findFIDMatch(oid)) {
+            addFood(tID, fID, r);
+        }
+
+        String [] user = {oid, tID, fID, r};
+        writer.writeNext(user);
+        writer.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    option();
+}
+
+private static boolean findFIDMatch(String id) throws FileNotFoundException {
+    File menu_file = new File("src/main/java/customer.csv");
+    Scanner scan = new Scanner(customer_file);
+    scan.useDelimiter(",");
+    Vector menuID = new Vector();
+
+    try {
+        for (int i = 0; i < 4; i++) {
+            scan.next();
+        }
+
+        while(scan.hasNext()) {
+            customerID.add(scan.next());
+            scan.next();
+            scan.next();
+            scan.next();
+        }
+    } catch (Exception e) {
+
+    }
+
+    scan.close();
+
+    if (isNewCustomerFile()) {
+        return true;
+    }
+  }
+
+  private static void deleteFood() throws IOException {
+    File menu_file = new File("src/main/java/customer.csv");
+    File tempFile = new File("src/main/java/customer.csv");
+
+    String oid, tID, fID, r;
+    Scanner scan = new Scanner(customer_file);
+    scan.useDelimiter("[,\n]");
+
+    System.out.print("Please Enter the ID of food that you wish to delete : ");
+    String fid = inp.next();
+
+    try {
+        FileWriter output_customerFile = new FileWriter(tempFile, true);
+        CSVWriter writer = new CSVWriter(output_customerFile);
+
+        while (scan.hasNext()) {
+            oid = scan.nextLine().replace("\"", "");
+            tID = scan.nextLine().replaceAll("[\",]", "");
+            fID = scan.nextLine().replaceAll("[\",]", "");
+            r = scan.nextLine().replaceAll("[\",]", "");
+
+            if(oid.compareTo(fid) != 0) {
+                String [] food = {oid, tID, fID, r};
+                writer.writeNext(food);
             }
-
-            String [] user = {tID, fID, _r};
-            writer.writeNext(user);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
-        option();
+        writer.close();
+        scan.close();
+        customer_file.delete();
+        File dummies = new File("src/main/java/customer.csv");
+        tempFile.renameTo(dummies);
+        tempFile.delete();
+    } catch (Exception e) {
+        e.printStackTrace();
     }
 
-    private static void readFile() {
-        try {
-            FileReader filereader = new FileReader("src/main/java/customer.csv");
-            CSVReader csvReader = new CSVReader(filereader);
-            String[] nextRecord;
+    option();
+}
 
-            while ((nextRecord = csvReader.readNext()) != null) {
-                for (String cell : nextRecord) {
-                    System.out.print(cell + "\t");
-                }
-                System.out.println();
-            } csvReader.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+  private static void showMenu() throws IOException, CsvValidationException {
+    FileReader filereader = new FileReader("src/main/java/menu.csv");
+    CSVReader csvReader = new CSVReader(filereader);
+    String[] nextRecord;
 
+    while ((nextRecord = csvReader.readNext()) != null) {
+      for (String cell : nextRecord) {
+        System.out.print(cell + "\t");
+      }
+
+      System.out.println();
+    } csvReader.close();
+  }
+
+/*
     private static void addConfirmFood(String fID, String _q) throws IOException {
         File menu_file = new File("src/main/java/order.csv");
 
@@ -211,147 +328,53 @@ public class Customer {
         }
 
     }
+  */
 
-    private static void removeFood() throws IOException{
-        File menu_file = new File("customer.csv");
-        File tempFile = new File("customer.csv");
+  private static void option() throws IOException {
+    try {
+      System.out.print("1. Add food");
+      System.out.print("2. Delete food");
+      System.out.print("3. Update food");
+      System.out.print("4. Confirm food");
+      System.out.print("Please choose an option [1 - 4]: ");
+      String opt = inp.next();
+      switch (opt) {
+          case "1" -> {
+              addFood();
+              break;
+          }
+          case "2" -> {
+              deleteFood();
+              break;
+          }
+          case "3" -> {
+              updateFood();
+              break;
+          }
+          case "4" -> {
+              confirmFood();
+              break;
+          }
+          
+          default -> {
+              System.out.print("\nPlease enter a valid number from\n");
+              System.out.println("range [1 - 4]");
+              option();
+          }
+      }
+    } catch (Exception e) {
+      System.out.println("\nPlease enter a valid number from\n");
+      System.out.println("range [1 - 4] & do not enter any");
+      System.out.println("alphabet from [a - z]");
+      e.printStackTrace();
+      option();
+      }
+  }
 
-        String tID, fID, _r;
-        Scanner scan = new Scanner(customer_file);
-        scan.useDelimiter("[,\n]");
-
-        System.out.print("Please enter the FoodID you want to remove:  ");
-        String idf = inp.next();
-
-        try {
-            FileWriter output_customerFile = new FileWriter(tempFile, true);
-            CSVWriter writer = new CSVWriter(output_customerFile);
-
-            while (scan.hasNext()) {
-                tID = scan.next().replace("\"", "");
-                fID = scan.next().replaceAll("[\",]", "");
-                _r = scan.next().replaceAll("[\",]", "");
-
-                if(tID.compareTo(idf) != 0) {
-                    String [] food = {tID, fID, _r};
-                    writer.writeNext(food);
-                }
-            }
-
-            writer.close();
-            scan.close();
-            menu_file.delete();
-            File dummies = new File("customer.csv");
-            tempFile.renameTo(dummies);
-            tempFile.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        option();
-    }
-
-    public static void addFood() throws IOException{
-        try {
-            readFile();
-            Scanner id = new Scanner(System.in);
-            System.out.println("What is your table ID?");
-            String tID = id.nextLine();
-            System.out.println("Enter the food ID you want to order: ");
-            String fID = id.nextLine();
-            System.out.println("Please enter your remarks or put a dash (-) if you do not have any remarks: ");
-            String _r = id.nextLine();
-            String filepath = "src/main/java/customer.csv";
-            
-            addCustomerFood(tID, fID, _r);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void saveCustomer(int tID, String fID, String r, String filepath) {
-        try {
-            FileWriter fw = new FileWriter(filepath, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-
-            pw.println(tID + "," + fID + "," + r);
-            pw.flush();
-            pw.close();
-
-            JOptionPane.showMessageDialog(null, "Your order has been saved.");
-            option();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Your order has NOT been saved.");
-        } 
-    }
-
-    private static void option() throws IOException {
-        try {
-            System.out.println("1. Add food");          //addFood();
-            System.out.println("2. Remove food");       //removeFood();
-            System.out.println("3. Confirm food");      //confirmFood();
-            System.out.println("4. Update food");       //updateFood();
-            System.out.println("5. Exit");
-            System.out.println(" ");
-            System.out.print("Selection: ");
-            String select = inp.next();
-            switch (select) {
-                case "1":
-                    addFood();
-                    break;
-
-                case "2":
-                    removeFood();
-                    break;
-
-                case "3":
-                    confirmFood();
-                    break;
-
-                case "4":
-                    updateFood();
-                    break;
-
-                case "5":
-                    System.out.println("Thank you and have a nice day!");
-                    break;
-        
-                default:
-                    System.out.println("404 ERROR NOT FOUND!");
-                    System.out.println("PLEASE TRY AGAIN!");
-                    option();
-                }
-        } catch (Exception e) {
-            System.out.print("\nPlease enter a valid number!\n");
-            System.out.println("(Range: 1-5)");
-            e.printStackTrace();
-            option();
-        }
-    }
-
-
-    public static void main(String args[]) throws Exception{
-        Scanner selection = new Scanner(System.in);
-
-        System.out.println("Welcome to ABC Restaurant!");
-        System.out.println("Here is the menu of our restaurant!");
-        System.out.println(" ");
-
-            FileReader filereader = new FileReader("src/main/java/menu.csv");
-            CSVReader csvReader = new CSVReader(filereader);
-            String[] nextRecord;
-
-            while ((nextRecord = csvReader.readNext()) != null) {
-                for (String cell : nextRecord) {
-                    System.out.print(cell + "\t");
-                }
-                System.out.println();
-            } csvReader.close();
-      
-            System.out.println("");
-            System.out.println("What do you want to do next?");
-            option();
-    } 
+  public static void main(String args[]) throws Exception{
+    System.out.println("Welcome to ABC Restaurant!");
+    System.out.println("Here is our menu:");
+    showMenu();
+    option();
+  }
 }
