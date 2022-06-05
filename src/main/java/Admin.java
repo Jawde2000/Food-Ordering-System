@@ -1,8 +1,13 @@
-import java.io.*;
-import java.util.*;
-import com.opencsv.*;
+import com.opencsv.CSVWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.Vector;
 
-public class Admin {
+public class Admin extends Menu{
     private String adminPass;
     private String cfPass;
     public static Scanner inp = new Scanner(System.in);
@@ -26,11 +31,7 @@ public class Admin {
     }
 
     private boolean checkMatch() {
-        if (returnPass().equals(returnRPass())) {
-            return true;
-        }
-
-        return false;
+        return returnPass().equals(returnRPass());
     }
 
     private static boolean findIDMatch(String id) throws FileNotFoundException {
@@ -52,8 +53,8 @@ public class Admin {
     }
 
     private static boolean searchID(Vector id, String Id) {
-        for (int i = 0; i < id.size(); i++) {
-            if (id.get(i).toString().equals(Id)) {
+        for (Object o : id) {
+            if (o.toString().equals(Id)) {
                 return true;
             }
         }
@@ -74,13 +75,13 @@ public class Admin {
     }
 
     public static boolean isNewAdminFile() {
-        File admin = new File("admin.csv");
+        File admin = new File("src/main/java/admin.csv");
 
         return admin.length() == 0;
     }
 
     public static boolean isNewMenuFile() {
-        File menu = new File("menu.csv");
+        File menu = new File("src/main/java/menu.csv");
 
         return menu.length() == 0;
     }
@@ -163,8 +164,7 @@ public class Admin {
     private static String food() {
         inp.skip("\\R?");
         System.out.print("Food Name         : ");
-        String name = inp.nextLine();
-        return name;
+        return inp.nextLine();
     }
 
     private static String foodStatus() {
@@ -293,7 +293,7 @@ public class Admin {
     }
 
     private static void addFood(String FoodName, String status, String category, String size, String BHV, Vector price) throws IOException {
-        File menu_file = new File("menu.csv");
+        File menu_file = new File("src/main/java/menu.csv");
         String fid = generateFID();
 
         try {
@@ -320,7 +320,7 @@ public class Admin {
     }
 
     private static boolean findFIDMatch(String id) throws FileNotFoundException {
-        File menu_file = new File("menu.csv");
+        File menu_file = new File("src/main/java/menu.csv");
         Scanner scan = new Scanner(menu_file);
         scan.useDelimiter(",");
         Vector menuID = new Vector();
@@ -357,8 +357,8 @@ public class Admin {
     }
 
     private static void deleteMenu() throws IOException {
-        File menu_file = new File("menu.csv");
-        File tempFile = new File("menu.csv");
+        File menu_file = new File("src/main/java/menu.csv");
+        File tempFile = new File("src/main/java/tempMenu.csv");
 
         String fid, FoodName, status, category, size, BHV, price;
         Scanner scan = new Scanner(menu_file);
@@ -391,7 +391,7 @@ public class Admin {
             writer.close();
             scan.close();
             menu_file.delete();
-            File dummies = new File("menu.csv");
+            File dummies = new File("src/main/java/menu.csv");
             tempFile.renameTo(dummies);
             tempFile.delete();
         } catch (Exception e) {
@@ -402,7 +402,7 @@ public class Admin {
     }
 
     private static void modifyFood() throws IOException {
-        File menu_file = new File("menu.csv");
+        File menu_file = new File("src/main/java/menu.csv");
         File tempFile = new File("src/main/java/tempMenu.csv");
         String fid, FoodName, status, category, size, BHV, price;
         Vector fids = new Vector();
@@ -429,7 +429,7 @@ public class Admin {
 //                System.out.println(fid + " " + FoodName  + " " + status  + " " + category
 //                        + " " +  size  + " " + BHV  + " " + price);
 
-                if (fid.compareTo(idf) == 0) {
+                if (fid.equals(idf)) {
                     modifyMenuList(fid, FoodName, status, category, size, BHV, price);
                     System.out.print("Please Choose the food information you want to modify : ");
                     String mo_num = inp.next();
@@ -505,7 +505,7 @@ public class Admin {
             writer.close();
             scan.close();
             menu_file.delete();
-            File dummies = new File("menu.csv");
+            File dummies = new File("src/main/java/menu.csv");
             tempFile.renameTo(dummies);
             tempFile.delete();
 
@@ -520,6 +520,78 @@ public class Admin {
         option();
     }
 
+    protected static void retrieveResName(String i) {
+        String name = "", a1 = "", a2 = "";
+        try {
+            File restaurant = new File("src/main/java/restaurant.csv");
+
+            if (!isNewRestaurant()) {
+                Scanner scan = new Scanner(restaurant);
+                scan.useDelimiter("[\n,]");
+                name = scan.next().replaceAll("[\",]", "");
+                a1 = scan.next().replaceAll("[\",]", "");
+                a2 = scan.next().replaceAll("[\",]", "");
+                scan.close();
+            }
+
+            if (i.equals("1")) {
+                System.out.println("==============================");
+                System.out.println("\t\t\t" + name);
+                System.out.println("\t\t" + a1);
+                System.out.println("\t\t" + a2);
+                System.out.println("==============================");
+            } else if (i.equals("2")){
+                System.out.println("==============================");
+                System.out.println("          Welcome to");
+                System.out.println("\t\t\t" + name);
+                System.out.println("\t\t" + a1);
+                System.out.println("\t\t" + a2);
+                System.out.println("==============================");
+            } else {
+                System.out.println("==============================");
+                System.out.println("    Welcome to Restaurant");
+                System.out.println("==============================");
+            }
+        } catch (FileNotFoundException e) {
+        }
+    }
+
+    private static void restaurant() {
+        File restaurant = new File("src/main/java/restaurant.csv");
+        if (!isNewRestaurant()) {
+            retrieveResName("1");
+        } else {
+            System.out.println("==============================");
+            System.out.println("Your Restaurant Details");
+            System.out.println("==============================");
+        }
+
+        try {
+            System.out.print("Restaurant Name : ");
+            inp.nextLine();
+            String name = inp.nextLine();
+            System.out.println("Address 1       : ");
+            String a1 = inp.nextLine();
+            System.out.println("Address 2       : ");
+            String a2 = inp.nextLine();
+            FileWriter output_adminFile = new FileWriter(restaurant);
+            CSVWriter writer = new CSVWriter(output_adminFile);
+
+            String [] res = {name, a1, a2};
+            writer.writeNext(res);
+            writer.close();
+            option();
+        } catch (IOException e) {
+
+        }
+    }
+
+    protected static boolean isNewRestaurant() {
+        File restaurant = new File("src/main/java/restaurant.csv");
+
+        return restaurant.length() == 0;
+    }
+
     private static String returnName() {
         inp.skip("\\R?");
         System.out.print("Please Enter the new food name : ");
@@ -528,13 +600,13 @@ public class Admin {
     }
 
     private static String returnStatus() {
-        System.out.println("Please Enter the new status         : ");
+        System.out.print("Please Enter the new status         : ");
         String status = foodStatus();
         return status;
     }
 
     private static String returnCate() {
-        System.out.println("Please Enter the new Category     : ");
+        System.out.print("Please Enter the new Category     : ");
         String cate = category();
         return cate;
     }
@@ -557,7 +629,7 @@ public class Admin {
 
         if (sz.equals("None")) {
             System.out.print("Food Price       : RM");
-            String price = inp.next();
+            double price = inp.nextDouble();
             s_price.add(price);
         } else if (sz.equals("Large|Medium|Small")) {
             System.out.println("Please enter price 0 when");
@@ -600,26 +672,32 @@ public class Admin {
     private static void option() throws IOException {
         try {
             adminMenu();
-            System.out.print("Please choose an option [1 - 5] : ");
+            System.out.print("Please choose an option [1 - 8] : ");
             String opt = inp.next();
             switch (opt) {
                 case "1" -> {
                     addNewMenu();
-                    break;
                 }
                 case "2" -> {
                     modifyMenu();
-                    break;
                 }
                 case "3" -> {
                     deleteMenu();
-                    break;
                 }
                 case "4" -> {
                     new_admin_page();
-                    break;
                 }
                 case "5" -> {
+                    display_menu();
+                }
+                case "6" -> {
+                    restaurant();
+                }
+                case "7" -> {
+                    Order.viewOrderDetails("2");
+                    option();
+                }
+                case "8" -> {
                     logout();
                     break;
                 }
@@ -646,7 +724,89 @@ public class Admin {
         System.out.println("2) Modify menu");
         System.out.println("3) Delete menu");
         System.out.println("4) Add new admin");
-        System.out.println("5) Log out");
+        System.out.println("5) View menu");
+        System.out.println("6) Restaurant Details");
+        System.out.println("7) View Order and Profits");
+        System.out.println("8) Log out");
+    }
+
+    private static void viewMenu() throws IOException {
+        Menu menu = new Menu();
+        menu.displayMenuList();
+        System.out.print("Please Choose an option : ");
+        String opt = inp.next();
+
+        if (opt.equals("5")) {
+            option();
+        } else if (opt.equals("1") || opt.equals("2") || opt.equals("3") || opt.equals("4")) {
+            menu.load_menu(opt);
+            categoryView(menu, opt);
+        } else {
+            System.out.println("Option must be range in [1 - 5]");
+            viewMenu();
+        }
+    }
+
+    public static void categoryView(Menu menu, String opt) throws IOException {
+        System.out.print("Enter 0 to back to category      : \n");
+        System.out.print("Enter 1 to view the food details : \n");
+        System.out.print("Choice : ");
+        String opt_cate = inp.next();
+        option_category(opt_cate, menu, opt);
+    }
+
+    public static void option_category(String opt_cate, Menu menu, String opt) throws IOException {
+        if (opt_cate.equals("0")) {
+            viewMenu();
+        } else if (opt_cate.equals("1")) {
+            boolean found = false;
+            System.out.print("Enter Food ID to view the food details : ");
+            String id_detail = inp.next();
+
+            for (int i = 0; i < menu.fid.size(); i++) {
+                if (menu.fid.get(i).equals(id_detail)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                menu.details(id_detail);
+            } else {
+                System.out.println("ID not found in database");
+                option_category(opt_cate, menu, opt);
+            }
+
+            System.out.println("1. Edit Food details");
+            System.out.println("2. View Food Lists");
+            System.out.print("Option : ");
+            String option = inp.next();
+
+            if (option.equals("1")) {
+                modifyFood();
+            } else if (option.equals("2")) {
+                menu.load_menu(opt);
+                categoryView(menu, opt);
+            } else {
+                System.out.println("Only 1 & 2 are accepted");
+                option_category(opt_cate, menu, opt);
+            }
+
+        } else {
+            System.out.println("Only input 0 & 1 is accepted");
+            menu.load_menu(opt);
+            categoryView(menu, opt);
+        }
+    }
+
+    public static void display_menu() throws IOException {
+        final File menu_file = new File("src/main/java/menu.csv");
+
+        if(menu_file.length() != 0) {
+            viewMenu();
+        } else {
+            System.out.println("Menu is empty...");
+        }
     }
 
     private static boolean loginProcedure(String id, String pass) throws FileNotFoundException {
