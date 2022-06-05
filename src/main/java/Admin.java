@@ -700,7 +700,7 @@ public class Admin extends Menu{
                 }
                 case "8" -> {
                     logout();
-                    break;
+                    System.exit(0);
                 }
                 default -> {
                     System.out.print("\nPlease enter a valid number from\n");
