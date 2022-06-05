@@ -410,6 +410,7 @@ public class Admin extends Menu{
         scan.useDelimiter("[\n,]");
 
         try {
+            load_menu("4");
             FileWriter output_adminFile = new FileWriter(tempFile, true);
             CSVWriter writer = new CSVWriter(output_adminFile);
 
