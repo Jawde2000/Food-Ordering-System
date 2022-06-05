@@ -154,6 +154,7 @@ public class Order extends Customer{
         System.out.println("Press 1 to confirm completed order");
         System.out.println("Press 2 to refresh order list");
         System.out.println("Press 3 to view order list and total profits");
+        System.out.println("Press 4 to quit the order system");
         System.out.print("Enter your option : ");
         String opt = inp.next();
 
@@ -189,6 +190,9 @@ public class Order extends Customer{
                 open = false;
                 mainOrder();
             }
+        } else if(opt.equals("4")) {
+            System.out.println("Thank you for using the system...");
+            System.exit(0);
         } else {
             System.out.println("Option not exist...");
             mainOrder();
