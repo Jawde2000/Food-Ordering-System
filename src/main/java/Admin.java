@@ -410,6 +410,7 @@ public class Admin extends Menu{
         scan.useDelimiter("[\n,]");
 
         try {
+            load_menu("4");
             FileWriter output_adminFile = new FileWriter(tempFile, true);
             CSVWriter writer = new CSVWriter(output_adminFile);
 
@@ -667,6 +668,7 @@ public class Admin extends Menu{
     private static void logout() {
         System.out.println("Thank you for using the system");
         System.out.println("The system logged out.........");
+
     }
 
     private static void option() throws IOException {
@@ -699,7 +701,7 @@ public class Admin extends Menu{
                 }
                 case "8" -> {
                     logout();
-                    break;
+                    System.exit(0);
                 }
                 default -> {
                     System.out.print("\nPlease enter a valid number from\n");

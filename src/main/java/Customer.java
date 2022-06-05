@@ -198,6 +198,10 @@ public class Customer extends Menu{
     public static void updateFood() {
         String food_size;
         String food_price = "0.0";
+        String large_price = "0.0";
+        String medium_price = "0.0";
+        String small_price = "0.0";
+
         try {
             if (!isNewFoodList()) {
                 loadFoodList();
@@ -267,18 +271,29 @@ public class Customer extends Menu{
                                             }
 
                                             if (getPrice.get(0).equals("0")&& !getPrice.get(1).equals("0") && !getPrice.get(2).equals("0")) {
+                                                large_price = getPrice.get(0);
+                                                small_price = getPrice.get(1);
                                                 System.out.println("1. Large : RM " + getPrice.get(0));
                                                 System.out.println("2. Small : RM " + getPrice.get(1));
                                             } else if (getPrice.get(0).equals("0") && !getPrice.get(1).equals("0") && !getPrice.get(2).equals("0")){
+                                                large_price = getPrice.get(1);
+                                                small_price = getPrice.get(2);
                                                 System.out.println("1. Large : RM " + getPrice.get(1));
                                                 System.out.println("2. Small : RM " + getPrice.get(2));
                                             } else if (!getPrice.get(0).equals("0") && getPrice.get(1).equals("0") && !getPrice.get(2).equals("0")) {
+                                                large_price = getPrice.get(0);
+                                                small_price = getPrice.get(2);
                                                 System.out.println("1. Large : RM " + getPrice.get(0));
                                                 System.out.println("2. Small : RM " + getPrice.get(2));
                                             }else if (!getPrice.get(0).equals("0") && !getPrice.get(1).equals("0") && getPrice.get(2).equals("0")) {
+                                                large_price = getPrice.get(0);
+                                                small_price = getPrice.get(1);
                                                 System.out.println("1. Large : RM " + getPrice.get(0));
                                                 System.out.println("2. Small : RM " + getPrice.get(1));
                                             } else {
+                                                large_price = getPrice.get(0);
+                                                medium_price = getPrice.get(1);
+                                                small_price = getPrice.get(2);
                                                 System.out.println("1. Large : RM " + getPrice.get(0));
                                                 System.out.println("2. Medium : RM " + getPrice.get(1));
                                                 System.out.println("3. Small : RM " + getPrice.get(2));
@@ -289,19 +304,20 @@ public class Customer extends Menu{
 
                                             switch (food_size) {
                                                 case "1" -> {
-                                                    food_price = getPrice.get(0);
+                                                    food_price = large_price;
                                                     food_size = "Large";
                                                 }
                                                 case "2" -> {
-                                                    food_price = getPrice.get(1);
                                                     if (!_2Size) {
+                                                        food_price = medium_price;
                                                         food_size = "Medium";
                                                     } else {
+                                                        food_price = small_price;
                                                         food_size = "Small";
                                                     }
                                                 }
                                                 case "3" -> {
-                                                    food_price = getPrice.get(2);
+                                                    food_price = small_price;
                                                     food_size = "Small";
                                                 }
                                                 default -> {
@@ -694,6 +710,9 @@ public class Customer extends Menu{
         String food_size = "None";
         int quantity = 0;
         String food_price = "0.0";
+        String large_price = "0.0";
+        String medium_price = "0.0";
+        String small_price = "0.0";
         System.out.print("Please enter the food(ID) you wish to add: ");
         String foodID = inp.next();
         if (foodID.equals("0")) {
@@ -738,18 +757,29 @@ public class Customer extends Menu{
                     }
 
                     if (!getPrice.get(0).equals("0")&& !getPrice.get(1).equals("0") && !getPrice.get(2).equals("0")) {
+                        large_price = getPrice.get(0);
+                        small_price = getPrice.get(1);
                         System.out.println("1. Large : RM " + getPrice.get(0));
                         System.out.println("2. Small : RM " + getPrice.get(1));
                     } else if (getPrice.get(0).equals("0") && !getPrice.get(1).equals("0") && !getPrice.get(2).equals("0")){
+                        large_price = getPrice.get(1);
+                        small_price = getPrice.get(2);
                         System.out.println("1. Large : RM " + getPrice.get(1));
                         System.out.println("2. Small : RM " + getPrice.get(2));
                     } else if (!getPrice.get(0).equals("0") && getPrice.get(1).equals("0") && !getPrice.get(2).equals("0")) {
+                        large_price = getPrice.get(0);
+                        small_price = getPrice.get(2);
                         System.out.println("1. Large : RM " + getPrice.get(0));
                         System.out.println("2. Small : RM " + getPrice.get(2));
                     }else if (!getPrice.get(0).equals("0") && !getPrice.get(1).equals("0") && getPrice.get(2).equals("0")) {
+                        large_price = getPrice.get(0);
+                        small_price = getPrice.get(1);
                         System.out.println("1. Large : RM " + getPrice.get(0));
                         System.out.println("2. Small : RM " + getPrice.get(1));
                     } else {
+                        large_price = getPrice.get(0);
+                        medium_price = getPrice.get(1);
+                        small_price = getPrice.get(2);
                         System.out.println("1. Large : RM " + getPrice.get(0));
                         System.out.println("2. Small : RM " + getPrice.get(1));
                         System.out.println("3. Large : RM " + getPrice.get(2));
@@ -759,19 +789,21 @@ public class Customer extends Menu{
 
                     switch (food_size) {
                         case "1" -> {
-                            food_price = getPrice.get(0);
+                            food_price = large_price;
                             food_size = "Large";
                         }
                         case "2" -> {
-                            food_price = getPrice.get(1);
+
                             if (!_2Size) {
+                                food_price = medium_price;
                                 food_size = "Medium";
                             } else {
+                                food_price = small_price;
                                 food_size = "Small";
                             }
                         }
                         case "3" -> {
-                            food_price = getPrice.get(2);
+                            food_price = small_price;
                             food_size = "Small";
                         }
                         default -> {
