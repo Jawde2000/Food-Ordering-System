@@ -30,8 +30,10 @@ public class Order extends Customer{
     private static void loadOrder() {
         orderID.clear();
         tableID.clear();
+        foodName.clear();
         menuID.clear();
         quantity.clear();
+        size.clear();
         price_per.clear();
         totalP.clear();
         status.clear();
