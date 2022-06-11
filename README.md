@@ -15,3 +15,8 @@ RICKY TANG SIET HONG A20EC3008
 JONATHAN TING MOI YAO A20EC0194
 
 GHEBLAWI SAID SALEM SAID A20EC4067
+
+***IMPORTANT***
+Program Code Flow will start from Admin.java > Customer.java > Order.java
+Please run the code accordingly.
+***END OF LINE***
