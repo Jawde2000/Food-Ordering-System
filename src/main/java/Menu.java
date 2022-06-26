@@ -253,6 +253,7 @@ public class Menu {
 
     protected static void details(String id) {
         String equal = "=";
+        loadPrice();
 
         for (int i = 0; i < fid.size(); i++) {
             if (id.equals(fid.get(i))) {
