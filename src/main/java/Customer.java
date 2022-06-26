@@ -258,8 +258,8 @@ public class Customer extends Menu{
                                     if (fid.get(i).equals(id)) {
                                         boolean _2Size = false;
 
+                                        getPrice.clear();
                                         loadSize();
-
                                         if (size.equals("Large") || size.equals("Medium") || size.equals("Small")) {
                                             String [] price_ = price.get(i).split(" ");
                                             for (int j = 0; j < price_.length; j++) {
@@ -270,7 +270,7 @@ public class Customer extends Menu{
                                                 }
                                             }
 
-                                            if (getPrice.get(0).equals("0")&& !getPrice.get(1).equals("0") && !getPrice.get(2).equals("0")) {
+                                            if (getPrice.get(0).equals("0")&& !getPrice.get(1).equals("0")) {
                                                 large_price = getPrice.get(0);
                                                 small_price = getPrice.get(1);
                                                 System.out.println("1. Large : RM " + getPrice.get(0));
@@ -285,7 +285,7 @@ public class Customer extends Menu{
                                                 small_price = getPrice.get(2);
                                                 System.out.println("1. Large : RM " + getPrice.get(0));
                                                 System.out.println("2. Small : RM " + getPrice.get(2));
-                                            }else if (!getPrice.get(0).equals("0") && !getPrice.get(1).equals("0") && getPrice.get(2).equals("0")) {
+                                            }else if (!getPrice.get(0).equals("0") && !getPrice.get(1).equals("0")) {
                                                 large_price = getPrice.get(0);
                                                 small_price = getPrice.get(1);
                                                 System.out.println("1. Large : RM " + getPrice.get(0));
