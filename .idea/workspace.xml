@@ -45,7 +45,7 @@
       <recent name="C:\Users\User\OneDrive\Desktop\UTM 2022 Semester II\SECJ2154 Object Orianted Programming\Project\src\main\java" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Customer">
+  <component name="RunManager" selected="Application.Admin">
     <configuration name="Admin" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Admin" />
       <module name="Project" />
@@ -76,9 +76,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Customer" />
         <item itemvalue="Application.Admin" />
         <item itemvalue="Application.Order" />
+        <item itemvalue="Application.Customer" />
         <item itemvalue="Application.Menu" />
       </list>
     </recent_temporary>

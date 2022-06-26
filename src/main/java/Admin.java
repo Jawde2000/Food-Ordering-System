@@ -34,19 +34,22 @@ public class Admin extends Menu{
         return returnPass().equals(returnRPass());
     }
 
-    private static boolean findIDMatch(String id) throws FileNotFoundException {
-        Scanner scan = new Scanner(admin_file);
-        scan.useDelimiter("[\n,]");
+    private static boolean findIDMatch(String id) {
         Vector userID = new Vector();
+        try {
+            Scanner scan = new Scanner(admin_file);
+            scan.useDelimiter("[\n,]");
+            while(scan.hasNext()) {
+                userID.add(scan.next());
+                scan.next();
+                scan.next();
+            }
 
-        while(scan.hasNext()) {
-            userID.add(scan.next());
-            scan.next();
-            scan.next();
-        }
+            if (isNewAdminFile()) {
+                return true;
+            }
+        } catch (FileNotFoundException e) {
 
-        if (isNewAdminFile()) {
-            return true;
         }
 
         return searchID(userID, id);
@@ -676,6 +679,7 @@ public class Admin extends Menu{
             adminMenu();
             System.out.print("Please choose an option [1 - 8] : ");
             String opt = inp.next();
+
             switch (opt) {
                 case "1" -> {
                     addNewMenu();
