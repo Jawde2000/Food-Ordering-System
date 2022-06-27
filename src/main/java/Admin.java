@@ -560,16 +560,8 @@ public class Admin extends Menu{
         }
     }
 
-    private static void restaurant() {
+    private static void changeInfoRes() {
         File restaurant = new File("src/main/java/restaurant.csv");
-        if (!isNewRestaurant()) {
-            retrieveResName("1");
-        } else {
-            System.out.println("==============================");
-            System.out.println("Your Restaurant Details");
-            System.out.println("==============================");
-        }
-
         try {
             System.out.print("Restaurant Name : ");
             inp.nextLine();
@@ -587,6 +579,35 @@ public class Admin extends Menu{
             option();
         } catch (IOException e) {
 
+        }
+    }
+
+    private static void restaurant() {
+        if (!isNewRestaurant()) {
+            retrieveResName("1");
+            System.out.println("Do you want to change your Restaurant information?");
+            System.out.println("Press 1 for yes");
+            System.out.println("Press 2 for back to main menu");
+            System.out.print("Choice : ");
+            String input = inp.next();
+
+            if (input.equals("1")) {
+                changeInfoRes();
+            } else if (input.equals("2")) {
+                try {
+                    option();
+                } catch (IOException ignored) {
+
+                }
+            } else {
+                System.out.println("Option not exist...");
+                restaurant();
+            }
+        } else {
+            System.out.println("==============================");
+            System.out.println("Your Restaurant Details");
+            System.out.println("==============================");
+            changeInfoRes();
         }
     }
 
