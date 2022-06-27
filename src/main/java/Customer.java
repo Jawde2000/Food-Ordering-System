@@ -410,6 +410,8 @@ public class Customer extends Menu{
             File dummies = new File("src/main/java/foodList.csv");
             tempFLFile.renameTo(dummies);
             tempFLFile.delete();
+            loadFoodList();
+            mainMenu();
         } catch (FileNotFoundException e) {
 
         } catch (IOException e) {
@@ -614,6 +616,7 @@ public class Customer extends Menu{
         }
 
         for (int i = 0; i < foodQ.size(); i++) {
+
             System.out.format((i + 1) + ") %-1s x %-20s %-9s %-11s" ,foodQ.get(i), foodN.get(i), foodS.get(i), df.format(Double.parseDouble(foodP.get(i))));
             System.out.println();
         }
