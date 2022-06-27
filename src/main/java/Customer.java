@@ -352,6 +352,7 @@ public class Customer extends Menu{
             File dummies = new File("src/main/java/foodList.csv");
             tempFLFile.renameTo(dummies);
             tempFLFile.delete();
+            loadFoodList();
             mainMenu();
         } catch (FileNotFoundException e) {
 
